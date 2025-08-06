@@ -9,7 +9,7 @@ using GRBackendObject = System.IntPtr;
 namespace SkiaSharp
 {
 	[Flags]
-	public enum GRGlBackendState : UInt32
+	public enum GRGlBackendState : uint32
 	{
 		None = 0,
 		RenderTarget = 1 << 0,
@@ -28,7 +28,7 @@ namespace SkiaSharp
 	}
 
 	[Flags]
-	public enum GRBackendState : UInt32
+	public enum GRBackendState : uint32
 	{
 		None = 0,
 		All = 0xffffffff,

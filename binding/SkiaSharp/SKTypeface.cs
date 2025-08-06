@@ -146,7 +146,7 @@ namespace SkiaSharp
 
 		public int TableCount => SkiaApi.sk_typeface_count_tables (Handle);
 
-		public UInt32[] GetTableTags ()
+		public uint32[] GetTableTags ()
 		{
 			if (!TryGetTableTags (out var result)) {
 				throw new Exception ("Unable to read the tables for the file.");
@@ -154,10 +154,10 @@ namespace SkiaSharp
 			return result;
 		}
 
-		public bool TryGetTableTags (out UInt32[] tags)
+		public bool TryGetTableTags (out uint32[] tags)
 		{
-			var buffer = new UInt32[TableCount];
-			fixed (UInt32* b = buffer) {
+			var buffer = new uint32[TableCount];
+			fixed (uint32* b = buffer) {
 				if (SkiaApi.sk_typeface_get_table_tags (Handle, b) == 0) {
 					tags = null;
 					return false;
@@ -169,12 +169,12 @@ namespace SkiaSharp
 
 		// GetTableSize
 
-		public int GetTableSize (UInt32 tag) =>
+		public int GetTableSize (uint32 tag) =>
 			(int)SkiaApi.sk_typeface_get_table_size (Handle, tag);
 
 		// GetTableData
 
-		public byte[] GetTableData (UInt32 tag)
+		public byte[] GetTableData (uint32 tag)
 		{
 			if (!TryGetTableData (tag, out var result)) {
 				throw new Exception ("Unable to read the data table.");
@@ -182,7 +182,7 @@ namespace SkiaSharp
 			return result;
 		}
 
-		public bool TryGetTableData (UInt32 tag, out byte[] tableData)
+		public bool TryGetTableData (uint32 tag, out byte[] tableData)
 		{
 			var length = GetTableSize (tag);
 			var buffer = new byte[length];
@@ -196,7 +196,7 @@ namespace SkiaSharp
 			return true;
 		}
 
-		public bool TryGetTableData (UInt32 tag, int offset, int length, IntPtr tableData)
+		public bool TryGetTableData (uint32 tag, int offset, int length, IntPtr tableData)
 		{
 			var actual = SkiaApi.sk_typeface_get_table_data (Handle, tag, (IntPtr)offset, (IntPtr)length, (byte*)tableData);
 			return actual != IntPtr.Zero;

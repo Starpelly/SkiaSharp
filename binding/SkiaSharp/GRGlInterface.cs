@@ -134,7 +134,7 @@ namespace SkiaSharp
 			private static extern IntPtr LoadPackagedLibrary ([MarshalAs (UnmanagedType.LPWStr)] string lpFileName, uint Reserved);
 
 			[DllImport ("api-ms-win-core-libraryloader-l1-2-0.dll", SetLastError = true, CharSet = CharSet.Ansi)]
-			private static extern IntPtr GetProcAddress (IntPtr hModule, [MarshalAs (UnmanagedType.LPStr)] string lpProcName);
+			private static extern IntPtr GetProcAddress (IntPtr hModule, String lpProcName);
 
 			private static IntPtr LoadLibrary (string lpFileName) => LoadPackagedLibrary(lpFileName, 0);
 #elif USE_LIBRARY_IMPORT
@@ -142,21 +142,21 @@ namespace SkiaSharp
 			private static partial IntPtr LoadLibrary (string lpFileName);
 
 			[LibraryImport ("Kernel32.dll", SetLastError = true)]
-			private static partial IntPtr GetProcAddress (IntPtr hModule, [MarshalAs (UnmanagedType.LPStr)] string lpProcName);
+			private static partial IntPtr GetProcAddress (IntPtr hModule, String lpProcName);
 #else
 			[DllImport ("Kernel32.dll", SetLastError = true, CharSet = CharSet.Ansi)]
-			private static extern IntPtr LoadLibrary ([MarshalAs (UnmanagedType.LPStr)] string lpFileName);
+			private static extern IntPtr LoadLibrary (String lpFileName);
 
 			[DllImport ("Kernel32.dll", SetLastError = true, CharSet = CharSet.Ansi)]
-			private static extern IntPtr GetProcAddress (IntPtr hModule, [MarshalAs (UnmanagedType.LPStr)] string lpProcName);
+			private static extern IntPtr GetProcAddress (IntPtr hModule, String lpProcName);
 #endif
 
 #if USE_LIBRARY_IMPORT
 			[LibraryImport ("libEGL.dll")]
-			private static partial IntPtr eglGetProcAddress ([MarshalAs (UnmanagedType.LPStr)] string procname);
+			private static partial IntPtr eglGetProcAddress (String procname);
 #else
 			[DllImport ("libEGL.dll")]
-			private static extern IntPtr eglGetProcAddress ([MarshalAs (UnmanagedType.LPStr)] string procname);
+			private static extern IntPtr eglGetProcAddress (String procname);
 #endif
 
 			static AngleLoader()
@@ -220,7 +220,7 @@ namespace SkiaSharp
 			internal static partial IntPtr evas_gl_current_context_get (IntPtr evas_gl);
 
 			[LibraryImport(libevas)]
-			internal static partial IntPtr evas_gl_proc_address_get (IntPtr evas_gl, [MarshalAs (UnmanagedType.LPStr)] string name);
+			internal static partial IntPtr evas_gl_proc_address_get (IntPtr evas_gl, String name);
 
 			static EvasGlLoader ()
 			{

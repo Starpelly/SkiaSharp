@@ -13,7 +13,7 @@ namespace SkiaSharpGenerator
 	{
 		private static readonly string[] keywords =
 		{
-			"out", "in", "var", "ref"
+			"out", "in", "var", "ref", "extension"
 		};
 
 		protected readonly Dictionary<string, TypeMapping> typeMappings = new Dictionary<string, TypeMapping>();
@@ -98,45 +98,45 @@ namespace SkiaSharpGenerator
 			var standardMappings = new Dictionary<string, string>
 			{
 				// stdint.h types:
-				{ "uint8_t",              nameof(Byte) },
-				{ "uint16_t",             nameof(UInt16) },
-				{ "uint32_t",             nameof(UInt32) },
-				{ "uint64_t",             nameof(UInt64) },
-				{ "usize_t" ,             "/* usize_t */ " + nameof(UIntPtr) },
-				{ "uintptr_t" ,           nameof(UIntPtr) },
-				{ "int8_t",               nameof(SByte) },
-				{ "int16_t",              nameof(Int16) },
-				{ "int32_t",              nameof(Int32) },
-				{ "int64_t",              nameof(Int64) },
-				{ "size_t" ,              "/* size_t */ " + nameof(IntPtr) },
-				{ "intptr_t" ,            nameof(IntPtr) },
+				{ "uint8_t",              "uint8" },
+				{ "uint16_t",             "uint16" },
+				{ "uint32_t",             "uint32" },
+				{ "uint64_t",             "uint64" },
+				{ "usize_t" ,             "/* usize_t */ " + "c_uint" },
+				{ "uintptr_t" ,           "c_uintptr" },
+				{ "int8_t",               "int8" },
+				{ "int16_t",              "int16" },
+				{ "int32_t",              "int32" },
+				{ "int64_t",              "int64" },
+				{ "size_t" ,              "/* size_t */ " + "c_uint" },
+				{ "intptr_t" ,            "c_intptr" },
 
 				// standard types:
-				{ "bool",                 nameof(Byte) },
+				{ "bool",                 "uint8" },
 				{ "char",                 "/* char */ void" },
 				{ "unsigned char",        "/* unsigned char */ void" },
 				{ "signed char",          "/* signed char */ void" },
-				{ "short",                nameof(Int16) },
-				{ "short int",            nameof(Int16) },
-				{ "signed short",         nameof(Int16) },
-				{ "signed short int",     nameof(Int16) },
-				{ "unsigned short",       nameof(UInt16) },
-				{ "unsigned short int",   nameof(UInt16) },
-				{ "int",                  nameof(Int32) },
-				{ "signed",               nameof(Int32) },
-				{ "signed int",           nameof(Int32) },
-				{ "unsigned",             nameof(UInt32) },
-				{ "unsigned int",         nameof(UInt32) },
-				{ "long",                 nameof(Int64) },
-				{ "long int",             nameof(Int64) },
-				{ "long long",            nameof(Int64) },
-				{ "long long int",        nameof(Int64) },
-				{ "signed long",          nameof(Int64) },
-				{ "signed long int",      nameof(Int64) },
-				{ "unsigned long",        nameof(UInt64) },
-				{ "unsigned long int",    nameof(UInt64) },
-				{ "float",                nameof(Single) },
-				{ "double",               nameof(Double) },
+				{ "short",                "int16" },
+				{ "short int",            "int16" },
+				{ "signed short",         "int16" },
+				{ "signed short int",     "int16" },
+				{ "unsigned short",       "uint16" },
+				{ "unsigned short int",   "uint16" },
+				{ "int",                  "int32" },
+				{ "signed",               "int32" },
+				{ "signed int",           "int32" },
+				{ "unsigned",             "uint32" },
+				{ "unsigned int",         "uint32" },
+				{ "long",                 "int64" },
+				{ "long int",             "int64" },
+				{ "long long",            "int64" },
+				{ "long long int",        "int64" },
+				{ "signed long",          "int64" },
+				{ "signed long int",      "int64" },
+				{ "unsigned long",        "uint64" },
+				{ "unsigned long int",    "uint64" },
+				{ "float",                "float" },
+				{ "double",               "double" },
 				// TODO: long double, wchar_t ?
 
 				{ "void",                 "void" },
@@ -210,6 +210,9 @@ namespace SkiaSharpGenerator
 			var returnType = GetType(function.ReturnType);
 			if (map != null && map.Parameters.TryGetValue("-1", out var newR))
 			{
+				if (newR == "IntPtr")
+					newR = "void*";
+
 				returnType = newR;
 			}
 			else if (returnType == "Boolean" || GetCppType(function.ReturnType) == "bool")

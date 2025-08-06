@@ -1,0 +1,6 @@
+FileVersion = 1
+Dependencies = {corlib = "*", SkiaBeef = "*"}
+
+[Project]
+Name = "Sandbox"
+StartupObject = "Sandbox.Program"

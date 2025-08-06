@@ -43,19 +43,19 @@
         "cs": "Boolean"
       },
       "hb_codepoint_t": {
-        "cs": "UInt32"
+        "cs": "uint32"
       },
       "hb_color_t": {
-        "cs": "UInt32"
+        "cs": "uint32"
       },
       "hb_mask_t": {
-        "cs": "UInt32"
+        "cs": "uint32"
       },
       "hb_position_t": {
         "cs": "Int32"
       },
       "hb_tag_t": {
-        "cs": "UInt32"
+        "cs": "uint32"
       },
       "hb_var_int_t": {
         "cs": "Int32"
@@ -91,7 +91,7 @@
         "cs": "OpenTypeNameId"
       },
       "hb_language_t": {
-        "cs": "IntPtr"
+        "cs": "void*"
       },
       // structs
       "hb_glyph_info_t": {
@@ -216,7 +216,7 @@
         "flags": true
       },
       "hb_script_t": {
-        "cs": "UInt32",
+        "cs": "uint32",
         "generate": false
       }
     },
@@ -238,37 +238,37 @@
       },
       "hb_font_get_glyph_from_name": {
         "parameters": {
-          "1": "[MarshalAs (UnmanagedType.LPStr)] String"
+          "1": "String"
         }
       },
       "hb_font_glyph_from_string": {
         "parameters": {
-          "1": "[MarshalAs (UnmanagedType.LPStr)] String"
+          "1": "String"
         }
       },
       "hb_language_from_string": {
         "parameters": {
-          "0": "[MarshalAs (UnmanagedType.LPStr)] String"
+          "0": "String"
         }
       },
       "hb_script_from_string": {
         "parameters": {
-          "0": "[MarshalAs (UnmanagedType.LPStr)] String"
+          "0": "String"
         }
       },
       "hb_feature_from_string": {
         "parameters": {
-          "0": "[MarshalAs (UnmanagedType.LPStr)] String"
+          "0": "String"
         }
       },
       "hb_blob_create_from_file": {
         "parameters": {
-          "0": "[MarshalAs (UnmanagedType.LPStr)] String"
+          "0": "String"
         }
       },
       "hb_buffer_deserialize_glyphs": {
         "parameters": {
-          "1": "[MarshalAs (UnmanagedType.LPStr)] String"
+          "1": "String"
         }
       },
       "hb_destroy_func_t": {

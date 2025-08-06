@@ -38,19 +38,19 @@
     "types": {
       // type aliases
       "gr_vk_backendmemory_t": {
-        "cs": "IntPtr"
+        "cs": "void*"
       },
       "sk_color_t": {
-        "cs": "UInt32"
+        "cs": "uint32"
       },
       "sk_pmcolor_t": {
-        "cs": "UInt32"
+        "cs": "uint32"
       },
       "sk_vector_t": {
         "cs": "SKPoint"
       },
       "sk_font_table_tag_t": {
-        "cs": "UInt32"
+        "cs": "uint32"
       },
       // the rest
       "gr_vk_imageinfo_t": {
@@ -426,7 +426,7 @@
       "gr_gl_get_proc": {
         "cs": "GRGlGetProcProxyDelegate",
         "parameters": {
-          "-1": "IntPtr"
+          "-1": "void*"
         }
       },
       "gr_vk_func_ptr": {
@@ -436,7 +436,7 @@
       "gr_vk_get_proc": {
         "cs": "GRVkGetProcProxyDelegate",
         "parameters": {
-          "-1": "IntPtr"
+          "-1": "void*"
         }
       },
       "sk_managedwstream_write_proc": {
@@ -454,49 +454,49 @@
       // functions
       "gr_glinterface_has_extension": {
         "parameters": {
-          "1": "[MarshalAs (UnmanagedType.LPStr)] String"
+          "1": "String"
         }
       },
       "gr_vk_extensions_has_extension": {
         "parameters": {
-          "1": "[MarshalAs (UnmanagedType.LPStr)] String"
+          "1": "String"
         }
       },
       "gr_vk_extensions_init": {
         "parameters": {
-          "6": "[MarshalAs (UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] String[]",
-          "8": "[MarshalAs (UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] String[]"
+          "6": "String[]",
+          "8": "String[]"
         }
       },
       "sk_fontmgr_match_family": {
         "parameters": {
-          "1": "IntPtr"
+          "1": "void*"
         }
       },
       "sk_fontmgr_match_family_style": {
         "parameters": {
-          "1": "IntPtr"
+          "1": "void*"
         }
       },
       "sk_fontmgr_match_family_style_character": {
         "parameters": {
-          "1": "IntPtr",
-          "3": "[MarshalAs (UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] String[]"
+          "1": "void*",
+          "3": "String[]"
         }
       },
       "sk_typeface_create_from_name": {
         "parameters": {
-          "0": "IntPtr"
+          "0": "void*"
         }
       },
       "sk_path_parse_svg_string": {
         "parameters": {
-          "1": "[MarshalAs (UnmanagedType.LPStr)] String"
+          "1": "String"
         }
       },
       "sk_wstream_write_text": {
         "parameters": {
-          "1": "[MarshalAs (UnmanagedType.LPStr)] String"
+          "1": "String"
         }
       },
       "sk_image_raster_release_proc": {

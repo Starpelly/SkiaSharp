@@ -1,0 +1,5 @@
+FileVersion = 1
+Projects = {SkiaBeef = {Path = "."}, Sandbox = {Path = "Sandbox"}}
+
+[Workspace]
+StartupProject = "Sandbox"

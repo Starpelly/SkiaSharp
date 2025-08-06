@@ -39,18 +39,27 @@ namespace SkiaSharpGenerator
 			Log?.LogVerbose("Writing C# API...");
 
 			writer.WriteLine("using System;");
-			writer.WriteLine("using System.Runtime.InteropServices;");
-			writer.WriteLine("using System.Runtime.CompilerServices;");
+			writer.WriteLine("using System.Interop;");
+			writer.WriteLine("using internal SkiaSharp;");
 			writer.WriteLine();
 			WriteNamespaces(writer);
-			writer.WriteLine();
-			WriteClasses(writer);
-			writer.WriteLine();
+
+			// @PELLY - HACK
+			// Because this program is called several times when we generate bindings,
+			// we can't store these in a list and compare them. And, I'm too lazy to create a "classes" file or whatever.
+			// So, this will have to do for now!
+			if (this.ConfigFile == "binding/libSkiaSharp.json")
+			{
+				writer.WriteLine();
+				WriteClasses(writer);
+				writer.WriteLine();
+			}
+
 			writer.WriteLine($"#region Functions");
 			writer.WriteLine();
 			writer.WriteLine($"namespace {config.Namespace}");
 			writer.WriteLine($"{{");
-			writer.WriteLine($"\tinternal unsafe partial class {config.ClassName}");
+			writer.WriteLine($"\tinternal class {config.ClassName}");
 			writer.WriteLine($"\t{{");
 			WriteFunctions(writer);
 			writer.WriteLine($"\t}}");
@@ -116,15 +125,15 @@ namespace SkiaSharpGenerator
 			name = map?.CsType ?? CleanName(name);
 
 			writer.WriteLine($"\t// {del}");
-			writer.WriteLine($"\t[UnmanagedFunctionPointer (CallingConvention.Cdecl)]");
+			writer.WriteLine($"\t[CallingConvention(.Cdecl)]");
 
 			var (paramsList, returnType) = GetManagedFunctionArguments(function, map);
 			if (returnType == "bool")
 			{
-				writer.WriteLine($"\t[return: MarshalAs (UnmanagedType.I1)]");
+				// writer.WriteLine($"\t[return: MarshalAs (UnmanagedType.I1)]");
 			}
 
-			writer.WriteLine($"\tinternal unsafe delegate {returnType} {name}({string.Join(", ", paramsList)});");
+			writer.WriteLine($"\tinternal function {returnType} {name}({string.Join(", ", paramsList)});");
 			writer.WriteLine();
 		}
 
@@ -174,15 +183,28 @@ namespace SkiaSharpGenerator
 
 			writer.WriteLine();
 			writer.WriteLine($"\t// {cppClassName}");
-			writer.WriteLine($"\t[StructLayout (LayoutKind.Sequential)]");
+
+			// @PELLY
+			// Beef doesn't support readonly structs
+			if (map?.IsReadOnly == true)
+			{
+				writer.WriteLine("\t// readonly");
+			}
+
+			writer.WriteLine($"\t[CRepr]");
 			var visibility = map?.IsInternal == true ? "internal" : "public";
-			var isReadonly = map?.IsReadOnly == true ? " readonly" : "";
+			var isReadonly = map?.IsReadOnly == true ? "" : "";
 			var equatable = map?.GenerateEquality == true ? $" : IEquatable<{name}>" : "";
-			writer.WriteLine($"\t{visibility}{isReadonly} unsafe partial struct {name}{equatable} {{");
+			writer.WriteLine($"\t{visibility}{isReadonly} struct {name}{equatable} {{");
 
 			var allFields = new List<string>();
 			foreach (var field in klass.Fields)
 			{
+				if (field.Name == "fBackendMemory")
+				{
+					var a = 0;
+				}
+
 				var type = GetType(field.Type);
 				var funcPointerType = GetFunctionPointerType(field.Type);
 				var cppT = GetCppType(field.Type);
@@ -194,6 +216,11 @@ namespace SkiaSharpGenerator
 				if (isPrivate)
 					fieldName = fieldName[9..];
 				isPrivate |= fieldName.StartsWith("reserved", StringComparison.OrdinalIgnoreCase);
+
+				if (fieldName == "var")
+				{
+					fieldName = "@var";
+				}
 
 				allFields.Add(fieldName);
 
@@ -212,7 +239,8 @@ namespace SkiaSharpGenerator
 					writer.WriteLine($"#endif");
 				}
 
-				if (!isPrivate && (map == null || (map.GenerateProperties && !map.IsInternal)))
+				// @PELLY - HACK
+				if (!isPrivate && (map == null || (map.GenerateProperties && !map.IsInternal)) && fieldName != "@var")
 				{
 					var propertyName = fieldName;
 					if (map != null && map.Members.TryGetValue(propertyName, out var fieldMap))
@@ -240,8 +268,8 @@ namespace SkiaSharpGenerator
 							else
 							{
 								writer.WriteLine($"\t\tpublic bool {propertyName} {{");
-								writer.WriteLine($"\t\t\treadonly get => {fieldName} > 0;");
-								writer.WriteLine($"\t\t\tset => {fieldName} = value ? (byte)1 : (byte)0;");
+								writer.WriteLine($"\t\t\t get => {fieldName} > 0;");
+								writer.WriteLine($"\t\t\tset mut => {fieldName} = value ? (uint8)1 : (uint8)0;");
 								writer.WriteLine($"\t\t}}");
 							}
 						}
@@ -265,8 +293,8 @@ namespace SkiaSharpGenerator
 							else
 							{
 								writer.WriteLine($"\t\tpublic {type} {propertyName} {{");
-								writer.WriteLine($"\t\t\treadonly get => {fieldName};");
-								writer.WriteLine($"\t\t\tset => {fieldName} = value;");
+								writer.WriteLine($"\t\t\t get => {fieldName};");
+								writer.WriteLine($"\t\t\tset mut => {fieldName} = value;");
 								writer.WriteLine($"\t\t}}");
 							}
 						}
@@ -284,16 +312,16 @@ namespace SkiaSharpGenerator
 				{
 					equalityFields.Add($"{f} == obj.{f}");
 				}
-				writer.WriteLine($"\t\tpublic readonly bool Equals ({name} obj) =>");
-				writer.WriteLine($"#pragma warning disable CS8909");
+				writer.WriteLine($"\t\tpublic bool Equals ({name} obj) =>");
+				// writer.WriteLine($"#pragma warning disable CS8909");
 				writer.WriteLine($"\t\t\t{string.Join(" && ", equalityFields)};");
-				writer.WriteLine($"#pragma warning restore CS8909");
+				// writer.WriteLine($"#pragma warning restore CS8909");
 				writer.WriteLine();
 
 				// Equals
-				writer.WriteLine($"\t\tpublic readonly override bool Equals (object obj) =>");
-				writer.WriteLine($"\t\t\tobj is {name} f && Equals (f);");
-				writer.WriteLine();
+				// writer.WriteLine($"\t\tpublic override bool Equals (object obj) =>");
+				// writer.WriteLine($"\t\t\tobj is {name} f && Equals (f);");
+				// writer.WriteLine();
 
 				// equality operators
 				writer.WriteLine($"\t\tpublic static bool operator == ({name} left, {name} right) =>");
@@ -304,7 +332,8 @@ namespace SkiaSharpGenerator
 				writer.WriteLine();
 
 				// GetHashCode
-				writer.WriteLine($"\t\tpublic readonly override int GetHashCode ()");
+				/*
+				writer.WriteLine($"\t\tpublic override int GetHashCode ()");
 				writer.WriteLine($"\t\t{{");
 				writer.WriteLine($"\t\t\tvar hash = new HashCode ();");
 				foreach (var f in allFields)
@@ -314,6 +343,7 @@ namespace SkiaSharpGenerator
 				writer.WriteLine($"\t\t\treturn hash.ToHashCode ();");
 				writer.WriteLine($"\t\t}}");
 				writer.WriteLine();
+				*/
 			}
 
 			writer.WriteLine($"\t}}");
@@ -373,8 +403,8 @@ namespace SkiaSharpGenerator
 			writer.WriteLine($"\t// {cppEnumName}");
 			if (map?.IsObsolete == true)
 				writer.WriteLine($"\t[Obsolete]");
-			if (map?.IsFlags == true)
-				writer.WriteLine($"\t[Flags]");
+			// if (map?.IsFlags == true)
+			//	writer.WriteLine($"\t[Flags]");
 			writer.WriteLine($"\t{visibility} enum {name} {{");
 			foreach (var field in enm.Items)
 			{
@@ -433,13 +463,17 @@ namespace SkiaSharpGenerator
 				.ToList();
 			foreach (var klass in classes)
 			{
-				var type = klass.GetDisplayName();
+				var displayName = klass.GetDisplayName();
+
+				var type = displayName;
 				skiaTypes.Add(type, klass.SizeOf != 0);
 
-				Log?.LogVerbose($"    {klass.GetDisplayName()}");
+				Log?.LogVerbose($"    {displayName}");
 
 				if (klass.SizeOf == 0)
-					writer.WriteLine($"using {klass.GetDisplayName()} = System.IntPtr;");
+				{
+					writer.WriteLine($"typealias {displayName} = void*;");
+				}
 			}
 
 			writer.WriteLine();
@@ -482,6 +516,7 @@ namespace SkiaSharpGenerator
 						var p = function.Parameters[i];
 						var n = string.IsNullOrEmpty(p.Name) ? $"param{i}" : p.Name;
 						n = SafeName(n);
+
 						var t1 = GetType(p.Type);
 						var t2 = GetFunctionPointerType(p.Type);
 
@@ -498,10 +533,15 @@ namespace SkiaSharpGenerator
 							skipFunction = true;
 							break;
 						}
-						if (t1 == "Boolean" || cppT == "bool")
-							t1 = t2 = "[MarshalAs (UnmanagedType.I1)] bool";
+						// if (t1 == "Boolean" || cppT == "bool")
+						//	t1 = t2 = "[MarshalAs (UnmanagedType.I1)] bool";
 						if (funcMap != null && funcMap.Parameters.TryGetValue(i.ToString(), out var newT))
+						{
+							if (newT == "IntPtr")
+								newT = "void*";
+
 							t1 = t2 = newT;
+						}
 						paramsList.Add($"{t1} {n}");
 						paramsListWithFuncPointers.Add($"{t2} {n}");
 						paramNamesList.Add(n);
@@ -519,7 +559,7 @@ namespace SkiaSharpGenerator
 					else if (returnType == "Boolean" || GetCppType(function.ReturnType) == "bool")
 					{
 						returnType = "bool";
-						retAttr = $"[return: MarshalAs (UnmanagedType.I1)]";
+						// retAttr = $"[return: MarshalAs (UnmanagedType.I1)]";
 					}
 
 					writer.WriteLine();
@@ -532,18 +572,19 @@ namespace SkiaSharpGenerator
 					writer.WriteLine($"\t\tinternal static partial {returnType} {name} ({string.Join(", ", paramsListWithFuncPointers)});");
 
 					writer.WriteLine($"\t\t#else // !USE_LIBRARY_IMPORT");
-					writer.WriteLine($"\t\t[DllImport ({config.DllName}, CallingConvention = CallingConvention.Cdecl)]");
-					if (!string.IsNullOrEmpty(retAttr))
-						writer.WriteLine($"\t\t{retAttr}");
+					writer.WriteLine($"\t\t[Import({config.DllName}), CLink, CallingConvention(.Cdecl)]");
+					//if (!string.IsNullOrEmpty(retAttr))
+					//	writer.WriteLine($"\t\t{retAttr}");
 					writer.WriteLine($"\t\tinternal static extern {returnType} {name} ({string.Join(", ", paramsList)});");
 					writer.WriteLine($"\t\t#endif");
 
 					writer.WriteLine($"\t\t#else");
 					writer.WriteLine($"\t\tprivate partial class Delegates {{");
-					writer.WriteLine($"\t\t\t[UnmanagedFunctionPointer (CallingConvention.Cdecl)]");
+					// writer.WriteLine($"\t\t\t[UnmanagedFunctionPointer (CallingConvention.Cdecl)]");
+					writer.WriteLine("[/*CLink,*/ CallingConvention(.Cdecl)]");
 					if (!string.IsNullOrEmpty(retAttr))
 						writer.WriteLine($"\t\t\t{retAttr}");
-					writer.WriteLine($"\t\t\tinternal delegate {returnType} {name} ({string.Join(", ", paramsList)});");
+					writer.WriteLine($"\t\t\tinternal function {returnType} {name} ({string.Join(", ", paramsList)});");
 					writer.WriteLine($"\t\t}}");
 					writer.WriteLine($"\t\tprivate static Delegates.{name} {name}_delegate;");
 					writer.WriteLine($"\t\tinternal static {returnType} {name} ({string.Join(", ", paramsList)}) =>");
@@ -572,7 +613,7 @@ namespace SkiaSharpGenerator
 			{
 				writer.WriteLine();
 				writer.WriteLine($"namespace {group.Key} {{");
-				writer.WriteLine($"internal static unsafe partial class DelegateProxies {{ ");
+				writer.WriteLine($"internal static class DelegateProxies {{ ");
 
 				foreach (var del in group)
 				{
@@ -615,6 +656,7 @@ namespace SkiaSharpGenerator
 
 			var proxies = map?.ProxySuffixes ?? new List<string> { "" };
 
+			/*
 			foreach (var proxyPrefix in proxies)
 			{
 				var proxyName = name.EndsWith("ProxyDelegate") ? name.Replace("ProxyDelegate", "Proxy") : name;
@@ -635,6 +677,7 @@ namespace SkiaSharpGenerator
 				writer.WriteLine($"\tprivate static partial {returnType} {implName}({string.Join(",", paramsList)});");
 				writer.WriteLine();
 			}
+			*/
 		}
 	}
 }

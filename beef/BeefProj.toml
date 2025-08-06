@@ -1,0 +1,6 @@
+FileVersion = 1
+
+[Project]
+Name = "SkiaBeef"
+TargetType = "BeefLib"
+StartupObject = "SkiaBeef.Program"

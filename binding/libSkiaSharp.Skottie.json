@@ -50,14 +50,14 @@
     "functions": {
       "skottie_animation_make_from_string": {
         "parameters": {
-          "0": "[MarshalAs (UnmanagedType.LPStr)] String",
+          "0": "String",
           "1": "int"
 
         }
       },
       "skottie_animation_make_from_file": {
         "parameters": {
-          "0": "[MarshalAs (UnmanagedType.LPStr)] String"
+          "0": "String"
         }
       }
     }

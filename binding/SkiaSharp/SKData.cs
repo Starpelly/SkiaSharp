@@ -57,7 +57,7 @@ namespace SkiaSharp
 
 		public static SKData CreateCopy (IntPtr bytes, ulong length)
 		{
-			if (!PlatformConfiguration.Is64Bit && length > UInt32.MaxValue)
+			if (!PlatformConfiguration.Is64Bit && length > uint32.MaxValue)
 				throw new ArgumentOutOfRangeException (nameof (length), "The length exceeds the size of pointers.");
 			return GetObject (SkiaApi.sk_data_new_with_copy ((void*)bytes, (IntPtr)length));
 		}
@@ -89,7 +89,7 @@ namespace SkiaSharp
 
 		public static SKData Create (ulong size)
 		{
-			if (!PlatformConfiguration.Is64Bit && size > UInt32.MaxValue)
+			if (!PlatformConfiguration.Is64Bit && size > uint32.MaxValue)
 				throw new ArgumentOutOfRangeException (nameof (size), "The size exceeds the size of pointers.");
 
 			return GetObject (SkiaApi.sk_data_new_uninitialized ((IntPtr)size));
@@ -223,9 +223,9 @@ namespace SkiaSharp
 		public SKData Subset (ulong offset, ulong length)
 		{
 			if (!PlatformConfiguration.Is64Bit) {
-				if (length > UInt32.MaxValue)
+				if (length > uint32.MaxValue)
 					throw new ArgumentOutOfRangeException (nameof (length), "The length exceeds the size of pointers.");
-				if (offset > UInt32.MaxValue)
+				if (offset > uint32.MaxValue)
 					throw new ArgumentOutOfRangeException (nameof (offset), "The offset exceeds the size of pointers.");
 			}
 			return GetObject (SkiaApi.sk_data_new_subset (Handle, (IntPtr)offset, (IntPtr)length));

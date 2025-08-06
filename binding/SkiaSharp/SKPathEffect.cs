@@ -32,7 +32,7 @@ namespace SkiaSharp
 			return GetObject(SkiaApi.sk_path_effect_create_sum(first.Handle, second.Handle));
 		}
 
-		public static SKPathEffect CreateDiscrete(float segLength, float deviation, UInt32 seedAssist = 0)
+		public static SKPathEffect CreateDiscrete(float segLength, float deviation, uint32 seedAssist = 0)
 		{
 			return GetObject(SkiaApi.sk_path_effect_create_discrete(segLength, deviation, seedAssist));
 		}

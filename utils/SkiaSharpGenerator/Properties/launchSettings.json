@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "SkiaSharpGenerator": {
+      "commandName": "Project",
+      "workingDirectory": "../../",
+      "commandLineArgs": "generate --config binding/libSkiaSharp.json --root externals/skia --output beef/src/SkiaSharp/SkiaApi.generated.cs"
+    }
+  }
+}

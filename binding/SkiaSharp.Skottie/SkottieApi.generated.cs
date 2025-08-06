@@ -10,8 +10,14 @@ using SkiaSharp.Skottie;
 
 #region Class declarations
 
+using d3d_alloc_t = System.IntPtr;
+using d3d_d12_command_queue_t = System.IntPtr;
+using d3d_d12_device_t = System.IntPtr;
+using d3d_d12_resource_t = System.IntPtr;
+using d3d_dxgi_adapter_t = System.IntPtr;
 using gr_backendrendertarget_t = System.IntPtr;
 using gr_backendtexture_t = System.IntPtr;
+using gr_d3d_memory_allocator_t = System.IntPtr;
 using gr_direct_context_t = System.IntPtr;
 using gr_glinterface_t = System.IntPtr;
 using gr_recording_context_t = System.IntPtr;
@@ -438,18 +444,18 @@ namespace SkiaSharp
 		#if !USE_DELEGATES
 		#if USE_LIBRARY_IMPORT
 		[LibraryImport (SKIA)]
-		internal static partial skottie_animation_t skottie_animation_make_from_file ([MarshalAs (UnmanagedType.LPStr)] String path);
+		internal static partial skottie_animation_t skottie_animation_make_from_file (String path);
 		#else // !USE_LIBRARY_IMPORT
 		[DllImport (SKIA, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern skottie_animation_t skottie_animation_make_from_file ([MarshalAs (UnmanagedType.LPStr)] String path);
+		internal static extern skottie_animation_t skottie_animation_make_from_file (String path);
 		#endif
 		#else
 		private partial class Delegates {
 			[UnmanagedFunctionPointer (CallingConvention.Cdecl)]
-			internal delegate skottie_animation_t skottie_animation_make_from_file ([MarshalAs (UnmanagedType.LPStr)] String path);
+			internal delegate skottie_animation_t skottie_animation_make_from_file (String path);
 		}
 		private static Delegates.skottie_animation_make_from_file skottie_animation_make_from_file_delegate;
-		internal static skottie_animation_t skottie_animation_make_from_file ([MarshalAs (UnmanagedType.LPStr)] String path) =>
+		internal static skottie_animation_t skottie_animation_make_from_file (String path) =>
 			(skottie_animation_make_from_file_delegate ??= GetSymbol<Delegates.skottie_animation_make_from_file> ("skottie_animation_make_from_file")).Invoke (path);
 		#endif
 
@@ -476,18 +482,18 @@ namespace SkiaSharp
 		#if !USE_DELEGATES
 		#if USE_LIBRARY_IMPORT
 		[LibraryImport (SKIA)]
-		internal static partial skottie_animation_t skottie_animation_make_from_string ([MarshalAs (UnmanagedType.LPStr)] String data, int length);
+		internal static partial skottie_animation_t skottie_animation_make_from_string (String data, int length);
 		#else // !USE_LIBRARY_IMPORT
 		[DllImport (SKIA, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern skottie_animation_t skottie_animation_make_from_string ([MarshalAs (UnmanagedType.LPStr)] String data, int length);
+		internal static extern skottie_animation_t skottie_animation_make_from_string (String data, int length);
 		#endif
 		#else
 		private partial class Delegates {
 			[UnmanagedFunctionPointer (CallingConvention.Cdecl)]
-			internal delegate skottie_animation_t skottie_animation_make_from_string ([MarshalAs (UnmanagedType.LPStr)] String data, int length);
+			internal delegate skottie_animation_t skottie_animation_make_from_string (String data, int length);
 		}
 		private static Delegates.skottie_animation_make_from_string skottie_animation_make_from_string_delegate;
-		internal static skottie_animation_t skottie_animation_make_from_string ([MarshalAs (UnmanagedType.LPStr)] String data, int length) =>
+		internal static skottie_animation_t skottie_animation_make_from_string (String data, int length) =>
 			(skottie_animation_make_from_string_delegate ??= GetSymbol<Delegates.skottie_animation_make_from_string> ("skottie_animation_make_from_string")).Invoke (data, length);
 		#endif
 

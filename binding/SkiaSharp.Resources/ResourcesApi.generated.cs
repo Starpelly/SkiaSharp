@@ -10,8 +10,14 @@ using SkiaSharp.Resources;
 
 #region Class declarations
 
+using d3d_alloc_t = System.IntPtr;
+using d3d_d12_command_queue_t = System.IntPtr;
+using d3d_d12_device_t = System.IntPtr;
+using d3d_d12_resource_t = System.IntPtr;
+using d3d_dxgi_adapter_t = System.IntPtr;
 using gr_backendrendertarget_t = System.IntPtr;
 using gr_backendtexture_t = System.IntPtr;
+using gr_d3d_memory_allocator_t = System.IntPtr;
 using gr_direct_context_t = System.IntPtr;
 using gr_glinterface_t = System.IntPtr;
 using gr_recording_context_t = System.IntPtr;
@@ -191,18 +197,18 @@ namespace SkiaSharp
 		#if !USE_DELEGATES
 		#if USE_LIBRARY_IMPORT
 		[LibraryImport (SKIA)]
-		internal static partial sk_data_t skresources_resource_provider_load (skresources_resource_provider_t instance, [MarshalAs (UnmanagedType.LPStr)] String path, [MarshalAs (UnmanagedType.LPStr)] String name);
+		internal static partial sk_data_t skresources_resource_provider_load (skresources_resource_provider_t instance, String path, String name);
 		#else // !USE_LIBRARY_IMPORT
 		[DllImport (SKIA, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern sk_data_t skresources_resource_provider_load (skresources_resource_provider_t instance, [MarshalAs (UnmanagedType.LPStr)] String path, [MarshalAs (UnmanagedType.LPStr)] String name);
+		internal static extern sk_data_t skresources_resource_provider_load (skresources_resource_provider_t instance, String path, String name);
 		#endif
 		#else
 		private partial class Delegates {
 			[UnmanagedFunctionPointer (CallingConvention.Cdecl)]
-			internal delegate sk_data_t skresources_resource_provider_load (skresources_resource_provider_t instance, [MarshalAs (UnmanagedType.LPStr)] String path, [MarshalAs (UnmanagedType.LPStr)] String name);
+			internal delegate sk_data_t skresources_resource_provider_load (skresources_resource_provider_t instance, String path, String name);
 		}
 		private static Delegates.skresources_resource_provider_load skresources_resource_provider_load_delegate;
-		internal static sk_data_t skresources_resource_provider_load (skresources_resource_provider_t instance, [MarshalAs (UnmanagedType.LPStr)] String path, [MarshalAs (UnmanagedType.LPStr)] String name) =>
+		internal static sk_data_t skresources_resource_provider_load (skresources_resource_provider_t instance, String path, String name) =>
 			(skresources_resource_provider_load_delegate ??= GetSymbol<Delegates.skresources_resource_provider_load> ("skresources_resource_provider_load")).Invoke (instance, path, name);
 		#endif
 
@@ -210,18 +216,18 @@ namespace SkiaSharp
 		#if !USE_DELEGATES
 		#if USE_LIBRARY_IMPORT
 		[LibraryImport (SKIA)]
-		internal static partial skresources_external_track_asset_t skresources_resource_provider_load_audio_asset (skresources_resource_provider_t instance, [MarshalAs (UnmanagedType.LPStr)] String path, [MarshalAs (UnmanagedType.LPStr)] String name, [MarshalAs (UnmanagedType.LPStr)] String id);
+		internal static partial skresources_external_track_asset_t skresources_resource_provider_load_audio_asset (skresources_resource_provider_t instance, String path, String name, String id);
 		#else // !USE_LIBRARY_IMPORT
 		[DllImport (SKIA, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern skresources_external_track_asset_t skresources_resource_provider_load_audio_asset (skresources_resource_provider_t instance, [MarshalAs (UnmanagedType.LPStr)] String path, [MarshalAs (UnmanagedType.LPStr)] String name, [MarshalAs (UnmanagedType.LPStr)] String id);
+		internal static extern skresources_external_track_asset_t skresources_resource_provider_load_audio_asset (skresources_resource_provider_t instance, String path, String name, String id);
 		#endif
 		#else
 		private partial class Delegates {
 			[UnmanagedFunctionPointer (CallingConvention.Cdecl)]
-			internal delegate skresources_external_track_asset_t skresources_resource_provider_load_audio_asset (skresources_resource_provider_t instance, [MarshalAs (UnmanagedType.LPStr)] String path, [MarshalAs (UnmanagedType.LPStr)] String name, [MarshalAs (UnmanagedType.LPStr)] String id);
+			internal delegate skresources_external_track_asset_t skresources_resource_provider_load_audio_asset (skresources_resource_provider_t instance, String path, String name, String id);
 		}
 		private static Delegates.skresources_resource_provider_load_audio_asset skresources_resource_provider_load_audio_asset_delegate;
-		internal static skresources_external_track_asset_t skresources_resource_provider_load_audio_asset (skresources_resource_provider_t instance, [MarshalAs (UnmanagedType.LPStr)] String path, [MarshalAs (UnmanagedType.LPStr)] String name, [MarshalAs (UnmanagedType.LPStr)] String id) =>
+		internal static skresources_external_track_asset_t skresources_resource_provider_load_audio_asset (skresources_resource_provider_t instance, String path, String name, String id) =>
 			(skresources_resource_provider_load_audio_asset_delegate ??= GetSymbol<Delegates.skresources_resource_provider_load_audio_asset> ("skresources_resource_provider_load_audio_asset")).Invoke (instance, path, name, id);
 		#endif
 
@@ -229,18 +235,18 @@ namespace SkiaSharp
 		#if !USE_DELEGATES
 		#if USE_LIBRARY_IMPORT
 		[LibraryImport (SKIA)]
-		internal static partial skresources_image_asset_t skresources_resource_provider_load_image_asset (skresources_resource_provider_t instance, [MarshalAs (UnmanagedType.LPStr)] String path, [MarshalAs (UnmanagedType.LPStr)] String name, [MarshalAs (UnmanagedType.LPStr)] String id);
+		internal static partial skresources_image_asset_t skresources_resource_provider_load_image_asset (skresources_resource_provider_t instance, String path, String name, String id);
 		#else // !USE_LIBRARY_IMPORT
 		[DllImport (SKIA, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern skresources_image_asset_t skresources_resource_provider_load_image_asset (skresources_resource_provider_t instance, [MarshalAs (UnmanagedType.LPStr)] String path, [MarshalAs (UnmanagedType.LPStr)] String name, [MarshalAs (UnmanagedType.LPStr)] String id);
+		internal static extern skresources_image_asset_t skresources_resource_provider_load_image_asset (skresources_resource_provider_t instance, String path, String name, String id);
 		#endif
 		#else
 		private partial class Delegates {
 			[UnmanagedFunctionPointer (CallingConvention.Cdecl)]
-			internal delegate skresources_image_asset_t skresources_resource_provider_load_image_asset (skresources_resource_provider_t instance, [MarshalAs (UnmanagedType.LPStr)] String path, [MarshalAs (UnmanagedType.LPStr)] String name, [MarshalAs (UnmanagedType.LPStr)] String id);
+			internal delegate skresources_image_asset_t skresources_resource_provider_load_image_asset (skresources_resource_provider_t instance, String path, String name, String id);
 		}
 		private static Delegates.skresources_resource_provider_load_image_asset skresources_resource_provider_load_image_asset_delegate;
-		internal static skresources_image_asset_t skresources_resource_provider_load_image_asset (skresources_resource_provider_t instance, [MarshalAs (UnmanagedType.LPStr)] String path, [MarshalAs (UnmanagedType.LPStr)] String name, [MarshalAs (UnmanagedType.LPStr)] String id) =>
+		internal static skresources_image_asset_t skresources_resource_provider_load_image_asset (skresources_resource_provider_t instance, String path, String name, String id) =>
 			(skresources_resource_provider_load_image_asset_delegate ??= GetSymbol<Delegates.skresources_resource_provider_load_image_asset> ("skresources_resource_provider_load_image_asset")).Invoke (instance, path, name, id);
 		#endif
 
@@ -248,18 +254,18 @@ namespace SkiaSharp
 		#if !USE_DELEGATES
 		#if USE_LIBRARY_IMPORT
 		[LibraryImport (SKIA)]
-		internal static partial sk_typeface_t skresources_resource_provider_load_typeface (skresources_resource_provider_t instance, [MarshalAs (UnmanagedType.LPStr)] String name, [MarshalAs (UnmanagedType.LPStr)] String url);
+		internal static partial sk_typeface_t skresources_resource_provider_load_typeface (skresources_resource_provider_t instance, String name, String url);
 		#else // !USE_LIBRARY_IMPORT
 		[DllImport (SKIA, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern sk_typeface_t skresources_resource_provider_load_typeface (skresources_resource_provider_t instance, [MarshalAs (UnmanagedType.LPStr)] String name, [MarshalAs (UnmanagedType.LPStr)] String url);
+		internal static extern sk_typeface_t skresources_resource_provider_load_typeface (skresources_resource_provider_t instance, String name, String url);
 		#endif
 		#else
 		private partial class Delegates {
 			[UnmanagedFunctionPointer (CallingConvention.Cdecl)]
-			internal delegate sk_typeface_t skresources_resource_provider_load_typeface (skresources_resource_provider_t instance, [MarshalAs (UnmanagedType.LPStr)] String name, [MarshalAs (UnmanagedType.LPStr)] String url);
+			internal delegate sk_typeface_t skresources_resource_provider_load_typeface (skresources_resource_provider_t instance, String name, String url);
 		}
 		private static Delegates.skresources_resource_provider_load_typeface skresources_resource_provider_load_typeface_delegate;
-		internal static sk_typeface_t skresources_resource_provider_load_typeface (skresources_resource_provider_t instance, [MarshalAs (UnmanagedType.LPStr)] String name, [MarshalAs (UnmanagedType.LPStr)] String url) =>
+		internal static sk_typeface_t skresources_resource_provider_load_typeface (skresources_resource_provider_t instance, String name, String url) =>
 			(skresources_resource_provider_load_typeface_delegate ??= GetSymbol<Delegates.skresources_resource_provider_load_typeface> ("skresources_resource_provider_load_typeface")).Invoke (instance, name, url);
 		#endif
 

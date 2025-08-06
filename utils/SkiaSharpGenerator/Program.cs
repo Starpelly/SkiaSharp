@@ -1,4 +1,5 @@
-﻿using Mono.Options;
+﻿using System.Collections.Generic;
+using Mono.Options;
 
 namespace SkiaSharpGenerator
 {

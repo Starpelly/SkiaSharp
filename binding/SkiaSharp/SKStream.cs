@@ -53,11 +53,11 @@ namespace SkiaSharp
 			return default (UInt16);
 		}
 
-		public UInt32 ReadUInt32 ()
+		public uint32 Readuint32 ()
 		{
-			if (ReadUInt32 (out var buffer))
+			if (Readuint32 (out var buffer))
 				return buffer;
-			return default (UInt32);
+			return default (uint32);
 		}
 
 		public bool ReadBool ()
@@ -102,9 +102,9 @@ namespace SkiaSharp
 			}
 		}
 
-		public bool ReadUInt32 (out UInt32 buffer)
+		public bool Readuint32 (out uint32 buffer)
 		{
-			fixed (UInt32* b = &buffer) {
+			fixed (uint32* b = &buffer) {
 				return SkiaApi.sk_stream_read_u32 (Handle, b);
 			}
 		}
@@ -412,7 +412,7 @@ namespace SkiaSharp
 			return SkiaApi.sk_wstream_write_16 (Handle, value);
 		}
 
-		public bool Write32 (UInt32 value)
+		public bool Write32 (uint32 value)
 		{
 			return SkiaApi.sk_wstream_write_32 (Handle, value);
 		}
@@ -432,7 +432,7 @@ namespace SkiaSharp
 			return SkiaApi.sk_wstream_write_bigdec_as_text (Handle, value, digits);
 		}
 
-		public bool WriteHexAsText (UInt32 value, int digits)
+		public bool WriteHexAsText (uint32 value, int digits)
 		{
 			return SkiaApi.sk_wstream_write_hex_as_text (Handle, value, digits);
 		}
@@ -452,7 +452,7 @@ namespace SkiaSharp
 			return SkiaApi.sk_wstream_write_scalar (Handle, value);
 		}
 
-		public bool WritePackedUInt32 (UInt32 value)
+		public bool WritePackeduint32 (uint32 value)
 		{
 			return SkiaApi.sk_wstream_write_packed_uint (Handle, (IntPtr)value);
 		}
@@ -466,7 +466,7 @@ namespace SkiaSharp
 			return SkiaApi.sk_wstream_write_stream (Handle, input.Handle, (IntPtr)length);
 		}
 
-		public static int GetSizeOfPackedUInt32 (UInt32 value)
+		public static int GetSizeOfPackeduint32 (uint32 value)
 		{
 			return SkiaApi.sk_wstream_get_size_of_packed_uint ((IntPtr) value);
 		}

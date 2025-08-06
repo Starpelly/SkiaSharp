@@ -39,9 +39,9 @@ namespace SkiaSharp
 
 		public IntPtr VkQueue { get; set; }
 
-		public UInt32 GraphicsQueueIndex { get; set; }
+		public uint32 GraphicsQueueIndex { get; set; }
 
-		public UInt32 MaxAPIVersion { get; set; }
+		public uint32 MaxAPIVersion { get; set; }
 
 		public GRVkExtensions Extensions { get; set; }
 
