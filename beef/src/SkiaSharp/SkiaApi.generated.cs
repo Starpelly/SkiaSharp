@@ -19110,7 +19110,7 @@ namespace SkiaSharp {
 	}
 
 	// sk_alphatype_t
-	public enum SKAlphaType : uint8{
+	public enum SKAlphaType {
 		// UNKNOWN_SK_ALPHATYPE = 0
 		Unknown = 0,
 		// OPAQUE_SK_ALPHATYPE = 1
@@ -19294,7 +19294,7 @@ namespace SkiaSharp {
 	}
 
 	// sk_colortype_t
-	internal enum SKColorTypeNative : uint8 {
+	internal enum SKColorTypeNative {
 		// UNKNOWN_SK_COLORTYPE = 0
 		Unknown = 0,
 		// ALPHA_8_SK_COLORTYPE = 1

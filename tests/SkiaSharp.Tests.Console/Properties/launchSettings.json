@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "SkiaSharp.Tests": {
-      "commandName": "Project",
-      "nativeDebugging": true
-    }
-  }
-}

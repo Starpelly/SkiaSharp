@@ -8,7 +8,7 @@ $projects = @(
     @{ Json="libHarfBuzzSharp.json";        Root="externals/skia/third_party/externals/harfbuzz";   Output="HarfBuzzSharp/HarfBuzzApi.generated.cs"          }
 )
 
-New-Item -ItemType Directory -Force -Path "output/generated/" | Out-Null
+# New-Item -ItemType Directory -Force -Path "output/generated/" | Out-Null
 
 dotnet build utils/SkiaSharpGenerator/SkiaSharpGenerator.csproj
 
@@ -25,5 +25,5 @@ foreach ($proj in $projects) {
         exit $LASTEXITCODE
     }
 
-    Copy-Item -Path binding/$output -Destination output/generated/$filename -Force
+    # Copy-Item -Path binding/$output -Destination output/generated/$filename -Force
 }
